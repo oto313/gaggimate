@@ -52,6 +52,8 @@ struct ControllerConfig {
     Capabilities capabilites;
 };
 
+#ifndef GM_PRESSURE_MOD
+
 const ControllerConfig GM_STANDARD_REV_1X = {.name = "GaggiMate Standard Rev 1.x",
                                              .autodetectValue = 0, // Voltage divider was missing in Rev 1.0 so it's 0
                                              .heaterPin = 14,
@@ -81,6 +83,45 @@ const ControllerConfig GM_STANDARD_REV_1X = {.name = "GaggiMate Standard Rev 1.x
                                                  .ledControls = false,
                                                  .tof = false,
                                              }};
+
+#else // GM_PRESSURE_MOD
+
+// Rev 1.x with external ADS1115 + AC dimmer on the ext header for pressure profiling
+// ext1=Z-C input, ext2=DIM output, ext4=ADS SDA, ext5=ADS SCL
+const ControllerConfig GM_STANDARD_REV_1X = {.name = "GaggiMate Rev 1.x + Pressure Mod",
+                                             .autodetectValue = 0,
+                                             .heaterPin = 14,
+                                             .pumpPin = 8,       // ext3 — dimmer DIM/gate output
+                                             .pumpSensePin = 2,  // ext2 — dimmer zero-cross input
+                                             .pumpOn = 1,
+                                             .valvePin = 10,
+                                             .valveOn = 1,
+                                             .altPin = 11,
+                                             .altOn = 1,
+                                             .pressureScl = 13,  // ext5
+                                             .pressureSda = 12,  // ext4
+                                             .maxSckPin = 6,
+                                             .maxCsPin = 7,
+                                             .maxMisoPin = 4,
+                                             .brewButtonPin = 38,
+                                             .steamButtonPin = 48,
+                                             .scaleSclPin = 17,
+                                             .scaleSdaPin = 18,
+                                             .scaleSda1Pin = 39,
+                                             .ext1Pin = 0,
+                                             .ext2Pin = 0,
+                                             .ext3Pin = 0,
+                                             .ext4Pin = 0,
+                                             .ext5Pin = 0,
+                                             .capabilites = {
+                                                 .dimming = true,
+                                                 .pressure = true,
+                                                 .ssrPump = false,
+                                                 .ledControls = false,
+                                                 .tof = false,
+                                             }};
+
+#endif // GM_PRESSURE_MOD
 
 const ControllerConfig GM_STANDARD_REV_2X = {.name = "GaggiMate Standard Rev 2.x",
                                              .autodetectValue = 1,
