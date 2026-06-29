@@ -1,6 +1,6 @@
 {
-  "name": "GaggiMate Controller (Pressure Mod)",
-  "version": "v0.1.0-pressure-mod",
+  "name": "GaggiMate Controller",
+  "version": "v0.1.1-pressure-mod",
   "new_install_prompt_erase": false,
   "builds": [
     {

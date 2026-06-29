@@ -1,6 +1,6 @@
 {
   "name": "GaggiMate Display",
-  "version": "v0.1.0-pressure-mod",
+  "version": "v0.1.1-pressure-mod",
   "new_install_prompt_erase": false,
   "builds": [
     {
