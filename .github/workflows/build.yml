@@ -44,6 +44,12 @@ jobs:
           mv .pio/build/controller/firmware.bin out/board-firmware.bin
           mv .pio/build/controller/partitions.bin out/board-partitions.bin
           mv .pio/build/controller/bootloader.bin out/board-bootloader.bin
+      - name: Build controller (pressure mod)
+        run: |
+          pio run -e controller-pressure
+          mv .pio/build/controller-pressure/firmware.bin out/board-pressure-firmware.bin
+          mv .pio/build/controller-pressure/partitions.bin out/board-pressure-partitions.bin
+          mv .pio/build/controller-pressure/bootloader.bin out/board-pressure-bootloader.bin
       - name: Build display FS
         run: |
           pio run -t buildfs -e display
@@ -113,7 +119,7 @@ jobs:
           REPO_NAME=${GITHUB_REPOSITORY#*/}
           cat > site/manifests/controller-manifest.json << MEOF
           {
-            "name": "GaggiMate Controller (Pressure Mod)",
+            "name": "GaggiMate Controller",
             "version": "${VERSION}",
             "new_install_prompt_erase": false,
             "builds": [
@@ -124,6 +130,24 @@ jobs:
                   { "path": "/${REPO_NAME}/latest/board-partitions.bin", "offset": 32768 },
                   { "path": "/${REPO_NAME}/boot_app0.bin", "offset": 57344 },
                   { "path": "/${REPO_NAME}/latest/board-firmware.bin", "offset": 65536 }
+                ]
+              }
+            ]
+          }
+          MEOF
+          cat > site/manifests/controller-pressure-manifest.json << MEOF
+          {
+            "name": "GaggiMate Controller (Pressure Mod)",
+            "version": "${VERSION}",
+            "new_install_prompt_erase": false,
+            "builds": [
+              {
+                "chipFamily": "ESP32-S3",
+                "parts": [
+                  { "path": "/${REPO_NAME}/latest/board-pressure-bootloader.bin", "offset": 0 },
+                  { "path": "/${REPO_NAME}/latest/board-pressure-partitions.bin", "offset": 32768 },
+                  { "path": "/${REPO_NAME}/boot_app0.bin", "offset": 57344 },
+                  { "path": "/${REPO_NAME}/latest/board-pressure-firmware.bin", "offset": 65536 }
                 ]
               }
             ]
@@ -164,8 +188,10 @@ jobs:
           </head>
           <body>
             <h1>GaggiMate Web Flasher</h1>
-            <h2>Controller (Pressure Mod)</h2>
+            <h2>Controller</h2>
             <esp-web-install-button manifest="manifests/controller-manifest.json"></esp-web-install-button>
+            <h2>Controller (Pressure Mod)</h2>
+            <esp-web-install-button manifest="manifests/controller-pressure-manifest.json"></esp-web-install-button>
             <h2>Display</h2>
             <esp-web-install-button manifest="manifests/display-manifest.json"></esp-web-install-button>
           </body>
