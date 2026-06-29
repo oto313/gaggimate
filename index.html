@@ -1,104 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="utf-8">
-  <title>GaggiMate Branch Flashing</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-
+  <title>GaggiMate Web Flasher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
-
-
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 80px auto; padding: 0 20px; }
+    h2 { margin-top: 2em; }
+    esp-web-install-button { display: block; margin: 10px 0; }
+  </style>
 </head>
 <body>
-
-<div class="container">
-  <div class="row">
-    <div class="one-half column" style="margin-top: 100px;">
-      <h4>Nightly</h4>
-      <b>Display</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/nightly/display-manifest.json"
-      ></esp-web-install-button>
-      <br />
-      <b>Headless</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/nightly/headless-manifest.json"
-      ></esp-web-install-button>
-      <br />
-      <b>Controller</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/nightly/controller-manifest.json"
-      ></esp-web-install-button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="one-half column" style="margin-top: 100px;">
-      <h4>feature/gear-pump</h4>
-      <b>Display</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/gear/display-manifest.json"
-      ></esp-web-install-button>
-      <br />
-      <b>Controller</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/gear/controller-manifest.json"
-      ></esp-web-install-button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="one-half column" style="margin-top: 100px;">
-      <h4>feature/selftest</h4>
-      <b>Display</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/selftest/display-manifest.json"
-      ></esp-web-install-button>
-      <br />
-      <b>Controller</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/selftest/controller-manifest.json"
-      ></esp-web-install-button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="one-half column" style="margin-top: 100px;">
-      <h4>feature/standby-heating</h4>
-      <b>Display</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/standby-heating/display-manifest.json"
-      ></esp-web-install-button>
-      <br />
-      <b>Controller</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/standby-heating/controller-manifest.json"
-      ></esp-web-install-button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="one-half column" style="margin-top: 100px;">
-      <h4>Nayrods Lab</h4>
-      <b>Display</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/nayrod-experimental/display-manifest.json"
-      ></esp-web-install-button>
-      <br />
-      <b>Controller</b><br />
-      <esp-web-install-button
-        manifest="/gaggimate/manifests/nayrod-experimental/controller-manifest.json"
-      ></esp-web-install-button>
-    </div>
-  </div>
-</div>
-
-<script
-  type="module"
-  src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"
-></script>
+  <h1>GaggiMate Web Flasher</h1>
+  <h2>Controller (Pressure Mod)</h2>
+  <esp-web-install-button manifest="manifests/controller-manifest.json"></esp-web-install-button>
+  <h2>Display</h2>
+  <esp-web-install-button manifest="manifests/display-manifest.json"></esp-web-install-button>
 </body>
 </html>
