@@ -86,3 +86,96 @@ jobs:
           generateReleaseNotes: true
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-web-flasher:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout gh-pages for boot_app0.bin
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          path: ghpages
+      - name: Download Firmware Files
+        uses: actions/download-artifact@v4
+        with:
+          name: gaggimate-firmware
+          path: firmware
+      - name: Prepare web flasher
+        run: |
+          VERSION=${GITHUB_REF_NAME}
+          mkdir -p site/latest
+          mkdir -p site/manifests
+          cp firmware/*.bin site/latest/
+          cp ghpages/boot_app0.bin site/boot_app0.bin
+          REPO_NAME=${GITHUB_REPOSITORY#*/}
+          cat > site/manifests/controller-manifest.json << MEOF
+          {
+            "name": "GaggiMate Controller (Pressure Mod)",
+            "version": "${VERSION}",
+            "new_install_prompt_erase": false,
+            "builds": [
+              {
+                "chipFamily": "ESP32-S3",
+                "parts": [
+                  { "path": "/${REPO_NAME}/latest/board-bootloader.bin", "offset": 0 },
+                  { "path": "/${REPO_NAME}/latest/board-partitions.bin", "offset": 32768 },
+                  { "path": "/${REPO_NAME}/boot_app0.bin", "offset": 57344 },
+                  { "path": "/${REPO_NAME}/latest/board-firmware.bin", "offset": 65536 }
+                ]
+              }
+            ]
+          }
+          MEOF
+          cat > site/manifests/display-manifest.json << MEOF
+          {
+            "name": "GaggiMate Display",
+            "version": "${VERSION}",
+            "new_install_prompt_erase": false,
+            "builds": [
+              {
+                "chipFamily": "ESP32-S3",
+                "parts": [
+                  { "path": "/${REPO_NAME}/latest/display-bootloader.bin", "offset": 0 },
+                  { "path": "/${REPO_NAME}/latest/display-partitions.bin", "offset": 32768 },
+                  { "path": "/${REPO_NAME}/boot_app0.bin", "offset": 57344 },
+                  { "path": "/${REPO_NAME}/latest/display-firmware.bin", "offset": 65536 },
+                  { "path": "/${REPO_NAME}/latest/display-filesystem.bin", "offset": 6553600 }
+                ]
+              }
+            ]
+          }
+          MEOF
+          cat > site/index.html << 'HEOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>GaggiMate Web Flasher</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+            <style>
+              body { font-family: system-ui, sans-serif; max-width: 600px; margin: 80px auto; padding: 0 20px; }
+              h2 { margin-top: 2em; }
+              esp-web-install-button { display: block; margin: 10px 0; }
+            </style>
+          </head>
+          <body>
+            <h1>GaggiMate Web Flasher</h1>
+            <h2>Controller (Pressure Mod)</h2>
+            <esp-web-install-button manifest="manifests/controller-manifest.json"></esp-web-install-button>
+            <h2>Display</h2>
+            <esp-web-install-button manifest="manifests/display-manifest.json"></esp-web-install-button>
+          </body>
+          </html>
+          HEOF
+          touch site/.nojekyll
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
+          keep_files: false
